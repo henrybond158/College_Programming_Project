@@ -1,0 +1,44 @@
+Any password policies or other security policies. i.e. required password changes
+one puncuation, capital letter and one number, max 16 to 12
+
+
+What information needs to be held on the users
+NA
+
+
+
+Any special privilidges for admin users
+retrival passwords
+
+the external hardware will be used as a positional device, would you like the user to be able to see the positions of it
+or have to remember with no references?
+Yes
+
+
+timescale?
+
+Intiation two weeks
+end of jan
+
+
+any users with disabilities that may require consideration?
+yes
+
+Budget?
+NA
+
+
+any company logo's and/or background to be displayed?
+Yes
+Fushicia & lime
+
+
+technical support already in place? dependancies such as .NET framework 4.5
+Docs
+
+
+how reguarly would you like reports on the systems progress?
+End of design period
+
+will any other systems be running along side this one?
+no access to other devices

@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes'?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v3" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" copyright="Copyright (c) Microsoft Corporation. All Rights Reserved." manifestVersion="1.0">
+  <assemblyIdentity buildType="release" language="neutral" name="Microsoft-Windows-Setup-Events" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" version="6.2.8250.0" versionScope="nonSxS"/>
+  <dependency discoverable="false" optional="false" resourceType="Resources">
+    <dependentAssembly dependencyType="prerequisite">
+      <assemblyIdentity buildType="release" language="*" name="Microsoft-Windows-Setup-Events.Resources" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" version="6.2.8250.0" versionScope="nonSxS"/>
+    </dependentAssembly>
+  </dependency>
+  <file destinationPath="$(runtime.system32)\" importPath="$(build.nttree)\" name="setupetw.dll" sourceName="setupetw.dll" sourcePath=".\">
+    <securityDescriptor name="WRP_FILE_DEFAULT_SDDL"/>
+  </file>
+  <registryKeys>
+    <registryKey keyName="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\Microsoft-Windows-Setup\{B9DA9FE6-AE5F-4f3e-B2FA-8E623C11DC75}">
+      <registryValue name="Enabled" value="1" valueType="REG_DWORD"/>
+      <registryValue name="EnableLevel" value="4" valueType="REG_DWORD"/>
+    </registryKey>
+    <registryKey keyName="HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\AutoLogger\Microsoft-Windows-Setup\{A615ACB9-D5A4-4738-B561-1DF301D207F8}">
+      <registryValue name="Enabled" value="1" valueType="REG_DWORD"/>
+      <registryValue name="EnableLevel" value="4" valueType="REG_DWORD"/>
+    </registryKey>
+  </registryKeys>
+  <instrumentation xmlns:win="http://manifests.microsoft.com/win/2004/08/windows/events" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <events xmlns="http://schemas.microsoft.com/win/2004/08/events">
+      <provider guid="{B9DA9FE6-AE5F-4f3e-B2FA-8E623C11DC75}" message="$(string.Deplorch.ProviderMessage)" messageFileName="%SystemRoot%\system32\setupetw.dll" name="Microsoft-Windows-Deplorch" resourceFileName="%SystemRoot%\system32\setupetw.dll" symbol="Microsoft_Windows_Deplorch">
+        <channels>
+          <channel chid="chaDeplorchAnalytic" name="Microsoft-Windows-Deplorch/Analytic" type="Analytic"/>
+          <importChannel chid="chaSetup" name="Setup"/>
+        </channels>
+        <keywords>
+          <keyword mask="0x00000001" message="$(string.Performance.KeywordMessage)" name="keyPerformance"/>
+        </keywords>
+        <templates>
+          <template tid="tidErrorCodeResult">
+            <data inType="win:UInt32" name="ErrorCode"/>
+          </template>
+          <template tid="tidCommandLine">
+            <data inType="win:UnicodeString" name="CommandLine"/>
+          </template>
+          <template tid="tidExecutionStatus">
+            <data inType="win:UnicodeString" name="Command"/>
+            <data inType="win:UInt32" name="ExitCode"/>
+          </template>
+        </templates>
+        <tasks>
+          <task eventGUID="{0D12CC84-14BA-4c48-9C41-00C4FE15566E}" message="$(string.StartSystemServices.TaskMessage)" name="tskStartSystemServices" value="1000"/>
+          <task eventGUID="{8D58F702-E815-4E47-BA6F-C6F1FC8DDB86}" message="$(string.RunUserProvidedScript.TaskMessage)" name="tskRunUserProvidedScript" value="2000"/>
+        </tasks>
+        <events>
+          <event channel="chaDeplorchAnalytic" keywords="keyPerformance" level="win:Informational" message="$(string.StartSystemServices.StartMessage)" opcode="win:Start" symbol="StartSystemServicesStart" task="tskStartSystemServices" value="1001"/>
+          <event channel="chaDeplorchAnalytic" keywords="keyPerformance" level="win:Informational" message="$(string.StartSystemServices.StopMessage)" opcode="win:Stop" symbol="StartSystemServicesStop" task="tskStartSystemServices" template="tidErrorCodeResult" value="1002"/>
+          <event channel="chaDeplorchAnalytic" keywords="keyPerformance" level="win:Informational" message="$(string.RunUserProvidedScript.StartMessage)" opcode="win:Start" symbol="RunUserProvidedScriptStart" task="tskRunUserProvidedScript" template="tidCommandLine" value="2001"/>
+          <event channel="chaDeplorchAnalytic" keywords="keyPerformance" level="win:Informational" message="$(string.RunUserProvidedScript.StopMessageExecuted)" opcode="win:Stop" symbol="RunUserProvidedScriptStopExecuted" task="tskRunUserProvidedScript" template="tidExecutionStatus" value="2002"/>
+          <event channel="chaDeplorchAnalytic" keywords="keyPerformance" level="win:Informational" message="$(string.RunUserProvidedScript.StopMessageFailedToExecute)" opcode="win:Stop" symbol="RunUserProvidedScriptStopFailedToExecute" task="tskRunUserProvidedScript" template="tidExecutionStatus" value="2003"/>
+        </events>
+      </provider>
+      <provider guid="{A615ACB9-D5A4-4738-B561-1DF301D207F8}" message="$(string.SetupQueue.ProviderMessage)" messageFileName="%SystemRoot%\system32\setupetw.dll" name="Microsoft-Windows-SetupQueue" resourceFileName="%SystemRoot%\system32\setupetw.dll" symbol="Microsoft_Windows_SetupQueue">
+        <channels>
+          <channel chid="chaSetupQueueAnalytic" name="Microsoft-Windows-SetupQueue/Analytic" type="Analytic"/>
+          <importChannel chid="chaSetup" name="Setup"/>
+        </channels>
+        <keywords>
+          <keyword mask="0x00000001" message="$(string.Performance.KeywordMessage)" name="keyPerformance"/>
+        </keywords>
+        <templates>
+          <template tid="tidCommand">
+            <data inType="win:UnicodeString" name="Command"/>
+          </template>
+          <template tid="tidErrorCodeResult">
+            <data inType="win:UInt32" name="ErrorCode"/>
+          </template>
+        </templates>
+        <tasks>
+          <task eventGUID="{DF4FB88E-6DF8-4aef-8D0C-041325F973DF}" message="$(string.CommandExecQueueRun.TaskMessage)" name="tskCommandExecQueueRun" value="1000"/>
+        </tasks>
+        <events>
+          <event channel="chaSetupQueueAnalytic" keywords="keyPerformance" level="win:Informational" message="$(string.CommandExecQueueRun.StartMessage)" opcode="win:Start" symbol="CommandExecQueueRunStart" task="tskCommandExecQueueRun" template="tidCommand" value="1001"/>
+          <event channel="chaSetupQueueAnalytic" keywords="keyPerformance" level="win:Informational" message="$(string.CommandExecQueueRun.StopMessage.Executed)" opcode="win:Stop" symbol="CommandExecQueueRunStopExecuted" task="tskCommandExecQueueRun" template="tidErrorCodeResult" value="1002"/>
+          <event channel="chaSetupQueueAnalytic" keywords="keyPerformance" level="win:Informational" message="$(string.CommandExecQueueRun.StopMessage.FailedToExecute)" opcode="win:Stop" symbol="CommandExecQueueRunStopFailedToExecute" task="tskCommandExecQueueRun" template="tidErrorCodeResult" value="1003"/>
+        </events>
+      </provider>
+    </events>
+  </instrumentation>
+  <localization>
+    <resources culture="en-US">
+      <stringTable>
+        <string id="Performance.KeywordMessage" value="Performance"/>
+        <string id="Deplorch.ProviderMessage" value="Microsoft-Windows-Deplorch"/>
+        <string id="SetupQueue.ProviderMessage" value="Microsoft-Windows-SetupQueue"/>
+        <string id="StartSystemServices.TaskMessage" value="Start System Services"/>
+        <string id="StartSystemServices.StartMessage" value="Starting system services."/>
+        <string id="StartSystemServices.StopMessage" value="Finished starting system services with status %1."/>
+        <string id="CommandExecQueueRun.TaskMessage" value="Execute command queue entry"/>
+        <string id="CommandExecQueueRun.StartMessage" value="Executing command queue entry &quot;%1&quot;."/>
+        <string id="CommandExecQueueRun.StopMessage.Executed" value="Command queue entry exited with status %1."/>
+        <string id="CommandExecQueueRun.StopMessage.FailedToExecute" value="Failed to launch command queue entry with status %1."/>
+        <string id="RunUserProvidedScript.TaskMessage" value="Run user-provided script"/>
+        <string id="RunUserProvidedScript.StartMessage" value="Running user-provided script: &quot;%1&quot;."/>
+        <string id="RunUserProvidedScript.StopMessageExecuted" value="Successfully executed script: &quot;%1&quot;. Exit code is %2."/>
+        <string id="RunUserProvidedScript.StopMessageFailedToExecute" value="Failed to execute script: &quot;%1&quot;.Exit code is %2."/>
+      </stringTable>
+    </resources>
+  </localization>
+  <cbb:debuggingInfo xmlns:cbb="urn:schemas-microsoft-com:asm.internal.v1">
+    <cbb:sourceManifest sourcePath="%basedir%\base\ntsetup\etw\microsoft-windows-setup-events.man"/>
+  </cbb:debuggingInfo>
+  <trustInfo>
+    <security>
+      <accessControl>
+        <securityDescriptorDefinitions>
+          <securityDescriptorDefinition description="Default SDDL for Windows Resource Protected file" name="WRP_FILE_DEFAULT_SDDL" operationHint="replace" sddl="O:S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464G:S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464D:P(A;;FA;;;S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464)(A;;GRGX;;;BA)(A;;GRGX;;;SY)(A;;GRGX;;;BU)(A;;GRGX;;;S-1-15-2-1)S:(AU;FASA;0x000D0116;;;WD)"/>
+        </securityDescriptorDefinitions>
+      </accessControl>
+    </security>
+  </trustInfo>
+</assembly>
